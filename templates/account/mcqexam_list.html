@@ -1,0 +1,14 @@
+{% extends 'account/base.html' %}
+{% block body_block %}
+<div class="cointainer">
+  <h1>List of Chapters</h1>
+  <ol>
+    {% for x in mcqexam_list %}
+    <h2> <a href="{{ x.id }}">{{x.exam_topic}}</a></h2>
+    {% endfor %}
+  </ol>
+    <a href="{% url 'account:create' %}">Please click here to create a new topic</a>
+
+</div>
+
+{% endblock %}

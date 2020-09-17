@@ -1,0 +1,13 @@
+{ extends 'quiz/quiz_base.html' %}
+
+{% block body_block %}
+
+<h1>List of Chapters</h1>
+<ol>
+  {% for x in mcqexam_list %}
+  <h2> <a href="{{ x.id }}">{{x.exam_topic}}</a></h2>
+  {% endfor %}
+
+  <a href="{% url 'account:create' %}">Please click here to create a new topic</a>
+</ol>
+{% endblock %}
