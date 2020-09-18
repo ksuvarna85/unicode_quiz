@@ -1,0 +1,41 @@
+<<<<<<< HEAD
+argon2-cffi==20.1.0
+asgiref @ file:///tmp/build/80754af9/asgiref_1594338739818/work
+bcrypt==3.1.7
+certifi==2020.6.20
+cffi==1.14.1
+chardet==3.0.4
+Django==3.0.3
+Faker==4.1.1
+idna==2.10
+Pillow==7.2.0
+pycparser==2.20
+python-dateutil==2.8.1
+pytz==2020.1
+requests==2.24.0
+six==1.15.0
+sqlparse==0.3.1
+text-unidecode==1.3
+urllib3==1.25.10
+wincertstore==0.2
+=======
+argon2-cffi==20.1.0
+asgiref @ file:///tmp/build/80754af9/asgiref_1594338739818/work
+bcrypt==3.1.7
+certifi==2020.6.20
+cffi==1.14.1
+chardet==3.0.4
+Django==3.0.3
+Faker==4.1.1
+idna==2.10
+Pillow==7.2.0
+pycparser==2.20
+python-dateutil==2.8.1
+pytz==2020.1
+requests==2.24.0
+six==1.15.0
+sqlparse==0.3.1
+text-unidecode==1.3
+urllib3==1.25.10
+wincertstore==0.2
+>>>>>>> 980beec... update
