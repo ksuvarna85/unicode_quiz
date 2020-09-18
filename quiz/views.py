@@ -3,6 +3,7 @@ from django.views.generic import TemplateView,ListView,DetailView,CreateView,Upd
 from quiz import models
 from django.urls import reverse_lazy
 from quiz.forms import QuestionForm
+from account.decorators import user_is_Student
 # Create your views here.
 
 class IndexView(TemplateView):

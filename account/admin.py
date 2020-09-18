@@ -5,10 +5,19 @@ from account.models import User,Teacher,Student,McqExam,Question,Student_Respons
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ("name","username","email")
-    list_filter = ("is_admin","is_teacher")
+    list_filter = ("is_admin","is_teacher","is_student")
     search_fields = ("first_name","last_name")
     ordering = ("first_name",)
+    readonly_fields=["password"]
 
+    def save_model(self, request, obj, form, change):
+        user_database = User.objects.get(pk=obj.pk)
+    # Check firs the case in which the password is not encoded, then check in the case that the password is encode
+        if not (check_password(form.data['password'], user_database.password) or user_database.password == form.data['password']):
+            obj.password = make_password(obj.password)
+        else:
+            obj.password = user_database.password
+        super().save_model(request, obj, form, change)
 
 @admin.register(Teacher)
 class TeacherAdmin(UserAdmin):

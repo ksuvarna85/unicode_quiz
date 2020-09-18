@@ -11,12 +11,22 @@
         <ul class="nav navbar-nav">
           <li><a href="{% url 'index' %}" class="navbar-brand">INDEX</a></li>
           <li><a href="{% url 'admin:index' %}" class="navbar-link">Admin</a></li>
-          <li><a href="{% url 'account:student_register' %}" class="navbar-link">Student Register</a></li>
-          <li><a href="{% url 'account:teacher' %}" class="navbar-link">Teacher Register</a></li>
+
+          {% if request.user.is_teacher %}
+          <li> <a href="{% url 'account:create' %}">Create Chapter</a></li>
+          <li> <a href="{% url 'account:add' %}">Add Question</a></li>
+          <li> <a href="{% url 'account:list' %}">List of test</a></li>
+          {% else %}
+
+          {% endif %}
+
           {% if user.is_authenticated %}
           <li><a href="{% url 'logout' %}" class="navbar-link">Logout</a> </li>
           {% else %}
+          <li><a href="{% url 'account:student_register' %}" class="navbar-link">Student Register</a></li>
+          <li><a href="{% url 'account:teacher' %}" class="navbar-link">Teacher Register</a></li>
           <li><a href="{% url 'account:user_login' %}" class="navbar-link">Login</a></li>
+        
           {% endif %}
         </ul>
 

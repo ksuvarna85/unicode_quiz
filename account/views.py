@@ -8,6 +8,8 @@ from account import models
 from django.views.generic import TemplateView,ListView,DetailView,CreateView,UpdateView,DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from account.decorators import user_is_student,TeacherRequiredMixin,user_is_teacher
+from django.utils.decorators import method_decorator
 # Create your views here.
 
 def index(request):
@@ -111,15 +113,17 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-class ChapterListView(ListView):
+class ChapterListView(LoginRequiredMixin,TeacherRequiredMixin,ListView):
     model=models.McqExam
 
-class QuestionDetailView(DetailView):
+
+class QuestionDetailView(LoginRequiredMixin,TeacherRequiredMixin,DetailView):
     context_object_name='question'
     model=models.McqExam
     template_name='account/quiz_detail.html'
 
 @login_required
+@user_is_teacher
 def questionform_view(request):
     form=QuestionForm()
     if request.method=="POST":
@@ -131,20 +135,23 @@ def questionform_view(request):
 
     return render(request,'account/question.html',{'form':form})
 
-class QuestionUpdateView(LoginRequiredMixin,UpdateView):
+class QuestionUpdateView(LoginRequiredMixin,TeacherRequiredMixin,UpdateView):
     fields=('id','question','option_1','option_2','option_3','option_4','correct_ans')
     model=models.Question
 
-class ChapterCreateView(LoginRequiredMixin,CreateView):
+
+class ChapterCreateView(LoginRequiredMixin,TeacherRequiredMixin,CreateView):
     fields=('exam_topic',)
     model=models.McqExam
 
 @login_required
+@user_is_student
 def student_chp_lst(request,student_pk):
     topic=models.McqExam.objects.all()
     return render(request,'account/student_chp_lst.html',{'topic':topic,'student_pk':student_pk})
 
 @login_required
+@user_is_student
 def question_detail(request,chp_pk,student_pk):
 
     if request.method=='POST':
@@ -168,3 +175,8 @@ def question_detail(request,chp_pk,student_pk):
         questions=models.Question.objects.filter(mcq_exam=chp_pk)
 
         return render(request,'account/detail.html',{'questions':questions,})
+
+
+class ChapterDeleteView(LoginRequiredMixin,TeacherRequiredMixin,DeleteView):
+    model=models.McqExam
+    success_url=reverse_lazy('account:list')

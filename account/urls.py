@@ -15,4 +15,5 @@ urlpatterns=[
     path('create/',views.ChapterCreateView.as_view(),name='create'),
     path('student/<int:student_pk>/',views.student_chp_lst,name='list_fun'),
     path('student/<int:student_pk>/<int:chp_pk>/',views.question_detail,name='detail_fun'),
+    path('delete/<int:pk>/',views.ChapterDeleteView.as_view(),name='delete'),
 ]
