@@ -1,5 +1,5 @@
 from django.contrib import admin
-from account.models import User,Teacher,Student,McqExam,Question,Student_Response
+from account.models import User,Teacher,Student,McqExam,Question,Student_Response,Results
 # Register your models here.
 
 @admin.register(User)
@@ -38,3 +38,4 @@ class StudentAdmin(admin.ModelAdmin):
 admin.site.register(McqExam)
 admin.site.register(Question)
 admin.site.register(Student_Response)
+admin.site.register(Results)

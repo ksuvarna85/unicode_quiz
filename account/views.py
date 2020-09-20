@@ -161,11 +161,29 @@ def question_detail(request,chp_pk,student_pk):
 
         question=models.Question.objects.get(id=question)
         student_email=models.Student.objects.get(email=request.user)
+        if models.Student_Response.objects.filter(question=question,student=student_email).exists():
+            return HttpResponse('already answered')
+        else:
 
-        student_response=models.Student_Response(student_response=answer,question=question,student=student_email)
+            student_response=models.Student_Response(student_response=answer,question=question,student=student_email)
 
 
-        student_response.save()
+            student_response.save()
+
+        #question_ans=models.McqExam.objects.filter(id=chp_pk)
+        #print(question_ans)
+        #for i in question_ans:
+
+        #    question_ans=models.Question.objects.filter(mcq_exam=i)
+        #    print(question_ans)
+
+        #for i in question_ans:
+        #    question_ans=models.Question.objects.get(question=i).correct_ans
+        #    student_ans=models.Student_Response.objects.get(question=i).student_response
+            #print(student_ans)
+
+            #print(student_ans)
+
 
 
 
@@ -174,7 +192,46 @@ def question_detail(request,chp_pk,student_pk):
     else:
         questions=models.Question.objects.filter(mcq_exam=chp_pk)
 
-        return render(request,'account/detail.html',{'questions':questions,})
+
+        return render(request,'account/detail.html',{'questions':questions,'chp_pk':chp_pk,'student_pk':student_pk})
+
+@login_required
+def result(request,student_pk,chp_pk):
+    question_ans=models.McqExam.objects.filter(id=chp_pk)
+    student_email=models.Student.objects.get(email=request.user)
+    #print(student_email)
+    student_ans=models.Student_Response.objects.filter(student=student_email)
+    print(student_ans)
+    #print(question_ans)
+    count=0
+    count_correct=0
+    for i in question_ans:
+
+        question_ans=models.Question.objects.filter(mcq_exam=i)
+        #print(question_ans)
+
+    for i in question_ans:
+        question_ans=models.Question.objects.get(question=i).correct_ans
+        student_ans=models.Student_Response.objects.get(student=student_email,question=i).student_response
+        print(student_ans+'     '+question_ans)
+        if int(student_ans)==int(question_ans):
+            count_correct=count_correct+1
+        count=count+1
+    chp_name=models.McqExam.objects.get(id=chp_pk)
+    #print(x)
+    student_result=models.Results(mcq_exam=chp_name,student=student_email,obtained_marks=count_correct,total_marks=count)
+    student_result.save()
+
+
+    return HttpResponse('You have score '+str(count_correct)+' out of '+str(count)+' marks')
+
+@login_required
+@user_is_teacher
+def student_result(request,chp_pk):
+    results=models.Results.objects.filter(mcq_exam=chp_pk)
+    print(results)
+    return render(request,'account/teacher_result.html',{'results':results})
+
 
 
 class ChapterDeleteView(LoginRequiredMixin,TeacherRequiredMixin,DeleteView):

@@ -130,3 +130,10 @@ class Student_Response(models.Model):
 
 	def __str__(self):
 		return 'response'
+
+
+class Results(models.Model):
+    mcq_exam=models.ForeignKey(McqExam,on_delete=models.CASCADE)
+    student=models.ForeignKey(Student,on_delete=models.CASCADE)
+    obtained_marks=models.CharField(max_length=9)
+    total_marks=models.CharField(max_length=9)

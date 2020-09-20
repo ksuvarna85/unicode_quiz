@@ -1,0 +1,8 @@
+{% extends 'account/base.html' %}
+{% block body_block %}
+
+{% for x in results %}
+<h3>{{x.student.first_name}} {{x.student.last_name}}  scored {{x.obtained_marks}}/{{x.total_marks}}</h3>
+{% endfor %}
+
+{% endblock %}
