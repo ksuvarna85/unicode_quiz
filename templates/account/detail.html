@@ -13,11 +13,13 @@
 <form  method="post">
   {% csrf_token %}
   <label for="ans">Correct Answer</label>
-  <input type="text" name="ans" value="">
+  <input type="text" name="ans{{x.id}}" value="" default="0">
 
-  <input type="hidden" name="luck" value="{{x.id}}">
-  <input type="submit" name="" value="submit">
-</form>
+
+
 {% endfor %}
+<input type="submit" name="" value="submit">
+</form>
+
 <a href="{% url 'account:result'  student_pk chp_pk %}">Click here to view results</a>
 {% endblock %}

@@ -155,37 +155,50 @@ def student_chp_lst(request,student_pk):
 def question_detail(request,chp_pk,student_pk):
 
     if request.method=='POST':
+        #print(request.POST)
+        lst1=[]
+        lst2=[]
+        lst3=[]
+        ans_lst=[]
 
-        answer=request.POST.get('ans')
-        question=request.POST.get('luck')
-
-        question=models.Question.objects.get(id=question)
-        student_email=models.Student.objects.get(email=request.user)
-        if models.Student_Response.objects.filter(question=question,student=student_email).exists():
-            return HttpResponse('already answered')
-        else:
-
-            student_response=models.Student_Response(student_response=answer,question=question,student=student_email)
-
-
-            student_response.save()
-
-        #question_ans=models.McqExam.objects.filter(id=chp_pk)
-        #print(question_ans)
-        #for i in question_ans:
-
-        #    question_ans=models.Question.objects.filter(mcq_exam=i)
-        #    print(question_ans)
-
-        #for i in question_ans:
-        #    question_ans=models.Question.objects.get(question=i).correct_ans
-        #    student_ans=models.Student_Response.objects.get(question=i).student_response
-            #print(student_ans)
-
-            #print(student_ans)
+        questions=models.Question.objects.filter(mcq_exam=chp_pk)
+        for i in questions:
+            lst2.append(i.question)
 
 
 
+        for i in request.POST.values():
+
+            lst1.append(i)
+
+        j=-1
+        for i in lst2:
+            lst3.append(lst1[j])
+            j=j-1
+        print(lst3)
+        for i in lst3:
+            if i=='':
+                ans_lst.append(0)
+                continue
+            else:
+                ans_lst.append(i)
+
+        count=len(lst2)-1
+        for i in lst2:
+            question=models.Question.objects.get(question=i)
+
+            user=models.User.objects.get(email=request.user)
+
+            student=models.Student.objects.get(email=user)
+            if models.Student_Response.objects.filter(question=question,student=student).exists():
+                return HttpResponse("already answered")
+            else:
+
+
+                student_response=models.Student_Response.objects.create(question=question,student=student,student_response=ans_lst[count])
+                student_response.save()
+                print(student_response)
+                count=count-1
 
         return redirect('account:detail_fun',student_pk,chp_pk)
 
@@ -220,6 +233,8 @@ def result(request,student_pk,chp_pk):
     chp_name=models.McqExam.objects.get(id=chp_pk)
     #print(x)
     student_result=models.Results(mcq_exam=chp_name,student=student_email,obtained_marks=count_correct,total_marks=count)
+    if models.Results.objects.filter(mcq_exam=chp_name,student=student_email).exists():
+        return HttpResponse('You have score '+str(count_correct)+' out of '+str(count)+' marks')
     student_result.save()
 
 
